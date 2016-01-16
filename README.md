@@ -28,7 +28,7 @@ Para generar una o varias gráficas se debe seguir el procedimiento estandar, cr
 
 Por regla general se recomienda usar como hosts únicamente nodos del cluster que no estén configurados en modo "data". Es aconsejable también especificar diferentes nodos del cluster para así dividir las peticiones entre varios sistemas.
 
-## Host templates.
+## Host Templates.
 
  - ElasticSearch Circuit Breakers.
  - ElasticSearch File System.
