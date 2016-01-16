@@ -2,6 +2,16 @@
 
 El template "ElasticSearch - Cacti" es una alternativa gratuita, de código abierto y basada en RDDTool, al popular software de monitorización "Marvel" de ElasticSearch. A diferencias de otros Plugins y templates para Cacti que se pueden encontrar en Internet, "ElasticSearch - Cacti" permite visualizar el 100% de las estadisticas que el cluster Elasticsearch pone a disposición.
 
+## Dependencias / Instalación / Creación de gráficas.
+
+Dependencia: jq instalado en el sistema.
+
+La instalación es muy simple, simplemente copiar elasticsearch.sh en la carpeta scripts de Cacti e importar el template desde Cacti (Import templates).
+
+Para generar una o varias gráficas, se debe crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados serán el hostname (IP o dominio) y dependiendo del gráfico, también el nombre del nodo dentro del cluster o bien el nombre del indice. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch. No se debe confundir el nodo que recibe la consulta con el nodo o el índice en particular del que se quieren obtener gráficas. 
+
+Se recomienda usar como hosts únicamente nodos del cluster que corran en modo cliente, no como nodo de datos. Es recomendable también especificar diferentes hosts clientes para así dividir las peticiones entre varios hosts.
+
 ## Host templates.
 
  - ElasticSearch Circuit Breakers.
