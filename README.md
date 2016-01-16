@@ -1,16 +1,30 @@
 # ElasticSearch - Cacti
 
-El template "ElasticSearch - Cacti" es una alternativa gratuita, de código abierto y basada en RDDTool, al popular software de monitorización "Marvel" de ElasticSearch. A diferencia de otros Plugins y templates para Cacti que se pueden encontrar en Internet, "ElasticSearch - Cacti" permite visualizar el 100% de las estadisticas que el cluster Elasticsearch pone a disposición.
+El template "ElasticSearch - Cacti" es una alternativa gratuita, de código abierto y basada en [RRDTool] (http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data"), al popular software de monitorización "[Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")" de [ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time"). A diferencia de otros Plugins y templates para [Cacti] (http://www.cacti.net/index.php "Graphing solution") que se pueden encontrar en Internet, "ElasticSearch - Cacti" permite visualizar el 100% de las estadisticas que el cluster Elasticsearch pone a disposición.
 
 ## Dependencias / Instalación / Creación de gráficas.
 
-Dependencia: jq instalado en el sistema.
+**Dependencias**
 
-La instalación es muy simple, simplemente copiar elasticsearch.sh en la carpeta scripts de Cacti e importar el template desde Cacti (Import templates).
+* [JQ](https://stedolan.github.io/jq/ "jq command-line JSON processor") instalado en el sistema.
 
-Para generar una o varias gráficas, se debe crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados serán el hostname (IP o dominio) y dependiendo del gráfico, también el nombre del nodo dentro del cluster o bien el nombre del indice. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch. No se debe confundir el nodo que recibe la consulta con el nodo o el índice en particular del que se quieren obtener gráficas. 
+* [Spine] (http://www.cacti.net/spine_download.php): Si se usa Cacti con el poller spine (recomendado), este debe ser compilado ampliando el límite de carateres predeterminado en los resultados, por ejemplo de la siguiente manera.
+```sh
+$ ./configure --with-results-buffer=20148
+$ make
+$ sudo make install
+```
+Más información sobre spine: [http://www.cacti.net/spine_install.php] (http://www.cacti.net/spine_install.php)
 
-Se recomienda usar como hosts únicamente nodos del cluster que corran en modo cliente, no como nodo de datos. Es recomendable también especificar diferentes hosts clientes para así dividir las peticiones entre varios hosts.
+**Instalación del template "ElasticSearch-Cacti"**
+
+La instalación es muy sencilla, simplemente se debe copiar el script "elasticsearch.sh" en la carpeta "scripts" de Cacti e importar el template en elasticsearch.xml con la opción "Import templates".
+
+**Creación de gráficas**
+
+Para generar una o varias gráficas se debe seguir el procedimiento estandar, crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados a la hora de generar gráficas serán el hostname (IP o dominio) y dependiendo del gráfico seleccionado, también el nombre del nodo dentro del cluster o bien el nombre del indice. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch. No se debe confundir el host que recibe la consulta con el nodo o el índice en particular del que se quieren obtener gráficas. 
+
+Por regla general se recomienda usar como hosts únicamente nodos del cluster que no estén configurados en modo "data". Es aconsejable también especificar diferentes nodos del cluster para así dividir las peticiones entre varios sistemas.
 
 ## Host templates.
 
