@@ -10,7 +10,7 @@ Algunas capturas de pantalla disponibles: [Screenshots] (https://github.com/Busi
 
 * [JQ](https://stedolan.github.io/jq/ "jq command-line JSON processor") instalado en el sistema.
 
-* [Spine] (http://www.cacti.net/spine_download.php): Si se usa Cacti con el poller spine (recomendado), este debe ser compilado ampliando el límite de carateres predeterminado en los resultados, por ejemplo de la siguiente manera.
+* [Spine] (http://www.cacti.net/spine_download.php): Si se usa Cacti con el poller spine (recomendado), este debe ser compilado ampliando el límite de caracteres predeterminado en los resultados, por ejemplo de la siguiente manera.
 ```sh
 $ ./configure --with-results-buffer=20148
 $ make
@@ -24,7 +24,7 @@ La instalación es muy sencilla, simplemente se debe copiar el script "elasticse
 
 **Creación de gráficas**
 
-Para generar una o varias gráficas se debe seguir el procedimiento estandar, crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados a la hora de generar gráficas serán el hostname (IP o dominio) y dependiendo del gráfico seleccionado, también el nombre del nodo dentro del cluster o bien el nombre del indice. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch. No se debe confundir el host que recibe la consulta con el nodo o el índice en particular del que se quieren obtener gráficas. 
+Para generar una o varias gráficas se debe seguir el procedimiento estandar, crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados a la hora de generar gráficas serán el hostname (IP o dominio) y dependiendo del gráfico seleccionado, también el nombre del nodo dentro del cluster o bien el nombre del indice. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch. No se debe confundir el host que recibe la consulta con el nodo o el índice en particular del que se quiere obtener gráficas. 
 
 Por regla general se recomienda usar como hosts únicamente nodos del cluster que no estén configurados en modo "data". Es aconsejable también especificar diferentes nodos del cluster para así dividir las peticiones entre varios sistemas.
 
