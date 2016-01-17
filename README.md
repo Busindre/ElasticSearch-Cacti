@@ -1,6 +1,6 @@
 # ElasticSearch - Cacti
 
-El template "ElasticSearch - Cacti" es una alternativa gratuita, de código abierto y basada en [RRDTool] (http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data"), al popular software de monitorización "[Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")" de [ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time"). A diferencia de otros Plugins y templates para [Cacti] (http://www.cacti.net/index.php "Graphing solution") que se pueden encontrar en Internet, "ElasticSearch - Cacti" permite visualizar el 100% de las estadisticas que el cluster Elasticsearch pone a disposición. 
+La plantilla "ElasticSearch - Cacti" es una alternativa gratuita, de código abierto y basada en [RRDTool] (http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data"), al popular software de monitorización "[Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")" de [ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time"). A diferencia de otros plugins y templates para [Cacti] (http://www.cacti.net/index.php "Graphing solution") que se pueden encontrar en Internet, "ElasticSearch - Cacti" permite visualizar el 100% de las estadisticas que el clúster Elasticsearch pone a disposición. 
 
 Algunas capturas de pantalla disponibles: [Screenshots] (https://github.com/Busindre/ElasticSearch-Cacti/issues/1 "ElasticSearch-Cacti screenshots").
 
@@ -10,7 +10,7 @@ Algunas capturas de pantalla disponibles: [Screenshots] (https://github.com/Busi
 
 * [JQ](https://stedolan.github.io/jq/ "jq command-line JSON processor") instalado en el sistema.
 
-* [Spine] (http://www.cacti.net/spine_download.php): Si se usa Cacti con el poller spine (recomendado), este debe ser compilado ampliando el límite de caracteres predeterminado en los resultados, por ejemplo de la siguiente manera.
+* [Spine] (http://www.cacti.net/spine_download.php): Si se usa Cacti con el poller spine (recomendado), este debe compilarse ampliando el límite de caracteres predeterminado en los resultados, por ejemplo de la siguiente manera.
 ```sh
 $ ./configure --with-results-buffer=20148
 $ make
@@ -24,9 +24,9 @@ La instalación es muy sencilla, simplemente se debe copiar el script "elasticse
 
 **Creación de gráficas**
 
-Para generar una o varias gráficas se debe seguir el procedimiento estandar, crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados a la hora de generar gráficas serán el hostname (IP o dominio) y dependiendo del gráfico seleccionado, también el nombre del nodo dentro del cluster o bien el nombre del indice. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch. No se debe confundir el host que recibe la consulta con el nodo o el índice en particular del que se quiere obtener gráficas. 
+Para generar una o varias gráficas se debe seguir el procedimiento estandar, crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados a la hora de generar gráficas serán el campo hostname (IP o dominio) y dependiendo del gráfico seleccionado, también el nombre del nodo dentro del clúster o bien el del índice. En las gráficas no se visualizará el nombre del host que es consultado, sino el nombre del nodo por el que se pregunta. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch por parte del script "elasticsearch.sh". No se debe confundir el host que recibe la consulta con el nodo o el índice en particular del que se quiere obtener gráficas. 
 
-Por regla general se recomienda usar como hosts únicamente nodos del cluster que no estén configurados en modo "data". Es aconsejable también especificar diferentes nodos del cluster para así dividir las peticiones entre varios sistemas.
+Por regla general se recomienda usar como hosts únicamente nodos del clúster que no estén configurados en modo "data". Es aconsejable también especificar diferentes nodos del clúster para así dividir las peticiones entre varios sistemas.
 
 ## Host Templates.
 
@@ -87,7 +87,7 @@ Por regla general se recomienda usar como hosts únicamente nodos del cluster qu
 * Elastic index warmer 
 
 ###ElasticSearch Indices.
-Tiene las mismas gráficas que el anterior "Index Host template", lógicamente en vez de por indice, por nodo del cluster.
+Tiene las mismas gráficas que el anterior "Index Host template", lógicamente en vez de por índice, por nodo del clúster.
  
 ###ElasticSearch JVM + Cluster health / status.
 * Elastic active node.
