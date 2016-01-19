@@ -166,10 +166,10 @@
 		</inputs>
 	</hash_0000253ca25959134db280087594563e0db64c>
 	<hash_000025552818edae64846ef0147aafbadefab5>
-		<name>Elastic node circuit breaker fielddata trip count</name>
+		<name>Elastic node circuit breakers fielddata trip count</name>
 		<graph>
 			<t_title></t_title>
-			<title>|input_es_node| - ElasticSearch circuit breaker fielddata trip count</title>
+			<title>|input_es_node| - ElasticSearch circuit breakers fielddata trip count</title>
 			<t_image_format_id></t_image_format_id>
 			<image_format_id>1</image_format_id>
 			<t_height></t_height>
@@ -269,10 +269,10 @@
 		</inputs>
 	</hash_000025552818edae64846ef0147aafbadefab5>
 	<hash_0000256d73eb03434e89e22b392dc20ad5cdeb>
-		<name>Elastic node circuit breaker parent trip count</name>
+		<name>Elastic node circuit breakers parent trip count</name>
 		<graph>
 			<t_title></t_title>
-			<title>|input_es_node| - ElasticSearch circuit breaker parent trip count</title>
+			<title>|input_es_node| - ElasticSearch circuit breakers parent trip count</title>
 			<t_image_format_id></t_image_format_id>
 			<image_format_id>1</image_format_id>
 			<t_height></t_height>
@@ -372,10 +372,10 @@
 		</inputs>
 	</hash_0000256d73eb03434e89e22b392dc20ad5cdeb>
 	<hash_0000259f6be366326dc10ff013cb70ab312362>
-		<name>Elastic node circuit breaker request trip count</name>
+		<name>Elastic node circuit breakers request trip count</name>
 		<graph>
 			<t_title></t_title>
-			<title>|input_es_node| - ElasticSearch circuit breaker request trip count</title>
+			<title>|input_es_node| - ElasticSearch circuit breakers request trip count</title>
 			<t_image_format_id></t_image_format_id>
 			<image_format_id>1</image_format_id>
 			<t_height></t_height>
