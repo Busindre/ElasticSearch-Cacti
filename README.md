@@ -1,36 +1,41 @@
 # ElasticSearch - Cacti
+[Spanish Readme] (https://github.com/Busindre/ElasticSearch-Cacti/blob/master/README-ES.md "Spanish ReadMe").
 
-La plantilla "ElasticSearch - Cacti" es una alternativa gratuita, de código abierto y basada en [RRDTool] (http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data"), al popular software de monitorización "[Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")" de [ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time"). A diferencia de otros plugins y templates para [Cacti] (http://www.cacti.net/index.php "Graphing solution") que se pueden encontrar en Internet, "ElasticSearch - Cacti" permite visualizar el 100% de las estadisticas que el clúster Elasticsearch pone a disposición. 
+"ElasticSearch - Cacti" template is a free software alternative ([RRDTool](http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data") based) to popular monitoring software  "[ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time") 's [Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")". In contrast with other [Cacti](http://www.cacti.net/index.php "Graphing solution") plugins and templates you can find on Internet,  "ElasticSearch - Cacti" allows us to visualize 100% of the statistics that the ElasticSearch cluster provides us. 
 
-Algunas capturas de pantalla disponibles: [Screenshots] (https://github.com/Busindre/ElasticSearch-Cacti/issues/1 "ElasticSearch-Cacti screenshots").
+##Screenshots
 
-## Dependencias / Instalación / Creación de gráficas.
+Some screenshots [here](https://github.com/Busindre/ElasticSearch-Cacti/issues/1 "ElasticSearch-Cacti screenshots").
 
-**Dependencias**
+## Dependencies / Installation / How to create graphics.
 
-* [JQ](https://stedolan.github.io/jq/ "jq command-line JSON processor") instalado en el sistema.
+**Dependencies**
 
-* [Spine] (http://www.cacti.net/spine_download.php): Si se usa Cacti con el poller spine (recomendado), este debe compilarse ampliando el límite de caracteres predeterminado en los resultados, por ejemplo de la siguiente manera.
+* [JQ](https://stedolan.github.io/jq/ "jq command-line JSON processor") installed on the system.
+
+* [Spine] (http://www.cacti.net/spine_download.php): if you use Cacti with Spine Poller (recommemded), this must be compiled increasing the default characters limit for the results, using the next commands: 
+ 
 ```sh
 $ ./configure --with-results-buffer=20148
 $ make
 $ sudo make install
 ```
-Más información sobre spine: [http://www.cacti.net/spine_install.php] (http://www.cacti.net/spine_install.php)
+[More information about Spine](http://www.cacti.net/spine_install.php)
 
-**Instalación del template "ElasticSearch-Cacti"**
+**"ElasticSearch-Cacti" template installation**
 
-La instalación es muy sencilla, simplemente se debe copiar el script "elasticsearch.sh" en la carpeta "scripts" de Cacti e importar el template en elasticsearch.xml con la opción "Import templates".
+Installation is quite easy, just copy "elasticsearch.sh" to the Cacti "scripts" folder and import elasticsearch.xml template with the "Import templates" option. 
 
-**Creación de gráficas**
 
-Para generar una o varias gráficas se debe seguir el procedimiento estandar, crear un "Device" y seleccionar el "Host template" pertinente o bien solo las gráficas que se quieran visualizar. Los datos solicitados a la hora de generar gráficas serán el campo hostname (IP o dominio) y dependiendo del gráfico seleccionado, también el nombre del nodo dentro del clúster o bien el del índice. En las gráficas no se visualizará el nombre del host que es consultado, sino el nombre del nodo por el que se pregunta. El hostname del “Device” será el que reciba la consulta de la API de ElasticSearch por parte del script "elasticsearch.sh". No se debe confundir el host que recibe la consulta con el nodo o el índice en particular del que se quiere obtener gráficas. Para los que no estén muy familiarizados con Cacti, si las gráficas muestran "|input_es_node|" o "|input_index_name|" en vez del nombre del nodo, se puede resolver de la siguiente forma.
+**How to create graphics**
 
-Graph Management > Search: "input_es_node" o "input_index_name" > Seleccionar >  Choose an action: Reapply Suggested Names.
+To generate one or more graphics you should follow the standard process, create a "Device" and select the appropriate "Host template" or just the graphics you want to visualize. The data required to generate will be the hostname (IP or domain) and sometimes (it depends on the selected graphic) the cluster node name (or index) too. Graphics will not show the requested hostname, but the corresponding node name. The "Device" hostname will be the one that the "elasticsearch.sh" script gets from the ElasticSearch API. You should not confuse the host that receives the request with the node or index whose graphics you want to get. If you are not familiar with Cacti, if graphics show "|input_es_node|" or "|input_index_name|" instead of the node name, you can fix it this way.
 
-Por regla general se recomienda usar como hosts únicamente nodos del clúster que no estén configurados en modo "data". Es aconsejable también especificar diferentes nodos del clúster para así dividir las peticiones entre varios sistemas.
+Graph Management > Search: "input_es_node" or "input_index_name" > Select >  Choose an action: Reapply Suggested Names.
 
-Es posible utilizar autenticación HTTP (Básica y Digest), modificar el puerto de ElasticSearch y especificar opciones de curl (timeouts, proxy http / SOCKS 5, etc.), tan solo hay que editar las opciones de la cabecera del script "elasticsearch.sh".
+Generally, it is recommended to use as host only clustered nodes not configured as "data" mode. It is also recommended to set different cluster nodes to submit requests among several systems.  
+
+You can use HTTP authentication (Basic and Digest), to modify ElasticSearch port and set curl options (timeouts, proxy http / SOCKS 5, etc.), just edit the "elascticsearch.sh" header options. 
 
 ## Host Templates.
 
@@ -45,7 +50,8 @@ Es posible utilizar autenticación HTTP (Básica y Digest), modificar el puerto 
 
 ## Associated Graph Templates.
 
-###ElasticSearch Circuit Breakers.
+### ElasticSearch Circuit Breakers.
+
 * Elastic node circuit breakers fielddata trip count.
 * Elastic node circuit breakers parent trip count.
 * Elastic node circuit breakers request trip count.
@@ -58,7 +64,7 @@ Es posible utilizar autenticación HTTP (Básica y Digest), modificar el puerto 
 * Elastic node fs read / writes operations (size).
 * Elastic node fs size 
 
-###ElasticSearch Index stats.
+### ElasticSearch Index stats.
 * Elastic index completion size.
 * Elastic index docs.
 * Elastic index fielddata (evictions).
@@ -90,11 +96,13 @@ Es posible utilizar autenticación HTTP (Básica y Digest), modificar el puerto 
 * Elastic index translog.
 * Elastic index warmer 
 
-###ElasticSearch Indices.
-Únicamente para nodos de datos "data nodes".
-Tiene las mismas gráficas que el anterior "Index Host template", lógicamente en vez de por índice, por nodo del clúster.
- 
+### ElasticSearch Index.
+
+Only for data nodes. 
+It has same graphics the same graphics as the previous "Index Host template", obviously by cluster node (not by index).
+
 ###ElasticSearch JVM + Cluster health / status.
+
 * Elastic active node.
 * Elastic cluster health (shards operations).
 * Elastic cluster health (shards status).
@@ -106,7 +114,7 @@ Tiene las mismas gráficas que el anterior "Index Host template", lógicamente e
 * Elastic node jvm pool.
 * Elastic node jvm threads 
 
-###ElasticSearch Network.
+### ElasticSearch Network.
 * Elastic node http connections.
 * Elastic node network TCP connections.
 * Elastic node network TCP operations.
@@ -125,7 +133,9 @@ Tiene las mismas gráficas que el anterior "Index Host template", lógicamente e
 * Elastic node process open files 
 
 ###ElasticSearch Threads pool.
-Los nodos no definidos como clientes solo podrán mostrar valores en las gráficas que visualizan los hilos que trabajan con indices, como son generic, management, listener, get, search,...
+
+Nodes not defined as clients can only show values on graphics that show threads working as indexes, like generic, management, listener, get, search...
+
 
 * Elastic node thread pool bulk.
 * Elastic node thread pool bulk (completed).
@@ -162,17 +172,17 @@ Los nodos no definidos como clientes solo podrán mostrar valores en las gráfic
 * Elastic node thread pool warmer.
 * Elastic node thread pool warmer (completed).
 
-**Reducir al máximo el espacio de las tablas RRD y las peticiones http al Cluster** (Usuarios avanzados de Cacti).
+**How to reduce a RRD table size and HTTP requests to the cluster as much as possible** (Cacti advanced users only).
 
-Si se presta atención a las nombres de las gráficas "Associated Graph Templates", es fácil darse cuenta de que estas se encuentran agrupadas, por ejemplo "Elastic node thread pool search" y "Elastic node thread pool get" o "Elastic node OS CPU" y "Elastic node OS Load average". Esto indica que están usando el mismo "Data template" y por lo tanto todas las tablas RRD que sirven como fuente para esas gráficas del nodo son intercambiables entre si, ya que contienen la misma información.
+If you see "Associated Graph Templates" graphics names, you realize they are grouped together. For example "Elastic node thread pool search" and "Elastic node thread pool get" or "Elastic node OS CPU" and "Elastic node OS Load average". That means they are using the same "Data template", so all RRD tables that feed those graphics can be interchanged because they hold the same information. 
 
-Sabiendo eso, se puede indicar en Cacti que todas las gráficas "Elastic node thread pool XXXX" utilicen una única tabla RRD (Data source), eso reduce en gran medida el tamaño el espacio en disco utilizado y las peticiones http al clúster. Veamos un ejemplo con las gráficas "thread pool".
+If you know that, you can set on Cacti that all "Elastic node thread pool XXXX" graphics use a single RRD table (Data Source), which greately reduces both disk usage and HTTP request. Let's see an example with "thread pool" graphics.
 
-Cacti > Data Sources > Host > "XXX thread pool (XXXX)" > Pulsamos sobre el primer resultado y copiamos la ruta al fichero .rrd > Sustituimos en el resto de gráficas mostradas anteriormente la ruta.
+Cacti > Data Sources > Host > "XXX thread pool (XXXX)" > We click on the first result and copy the path to the .rrd file > We substitute on the remaining graphs the path previously shown. 
 
-Ahora solo falta borrar los ficheros rrd que han quedado en desuso, si no importa perder datos, se pueden borrar todos los ficheros rrd del directorio "rra/" que pertenezcan al host. Otra posibilidad es pasados 15 minutos o más desde que se modifico la ruta de los archivos rrd, borrar todos los que han sido actualizados desde hace, por ejemplo 9 minutos (suponiendo que se actualizan cada 300 segundos).
+Now we just have to delete the rrd files which are no longer required. If losing data doesn't bother you, you can delete all the .rrd files of the "rra/" folder beloning to the host. Another possibilitie is after 15 minutes or more you modified rrd folder path, to delete all that have been updated from, for example, 9 minutes (if they are updated every 300 seconds).
 
 ```sh
 $ find /var/www/html/cacti/rra ! -mmin -9 -type f -print # Test
-$ find /var/www/html/cacti/rra ! -mmin -9 -type f -print -exec rm -rf {} \; # Borrar
+$ find /var/www/html/cacti/rra ! -mmin -9 -type f -print -exec rm -rf {} \; # Delete
 ```
