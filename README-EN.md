@@ -1,4 +1,5 @@
 # ElasticSearch - Cacti
+[Spanish Readme] (https://github.com/Busindre/ElasticSearch-Cacti/blob/master/README-ES.md "Spanish ReadMe").
 
 "ElasticSearch - Cacti" template is a free software alternative ([RRDTool](http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data") based) to popular monitoring software  "[ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time") 's [Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")". In contrast with other [Cacti](http://www.cacti.net/index.php "Graphing solution") plugins and templates you can find on Internet,  "ElasticSearch - Cacti" allows us to visualize 100% of the statistics that the ElasticSearch cluster provides us. 
 
