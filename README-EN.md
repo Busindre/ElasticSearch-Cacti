@@ -1,18 +1,18 @@
 # ElasticSearch - Cacti
 
-"ElasticSearch - Cacti" template is a free software alternative ([RRDTool](http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data") based) to popular monitoring software  "[ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time") 's [Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")". In contrast with other [Cacti](http://www.cacti.net/index.php "Graphing solution") plugins and templates you can find on Internet,  "ElasticSearch - Cacti" allows to visualize 100% statistics that ElasticSearch cluster provides you. 
+"ElasticSearch - Cacti" template is a free software alternative ([RRDTool](http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data") based) to popular monitoring software  "[ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time") 's [Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")". In contrast with other [Cacti](http://www.cacti.net/index.php "Graphing solution") plugins and templates you can find on Internet,  "ElasticSearch - Cacti" allows us to visualize 100% of the statistics that the ElasticSearch cluster provides us. 
 
 ##Screenshots
 
 Some screenshots [here](https://github.com/Busindre/ElasticSearch-Cacti/issues/1 "ElasticSearch-Cacti screenshots").
 
-## Dependencies / Installation / how to create graphics.
+## Dependencies / Installation / How to create graphics.
 
 **Dependencies**
 
 * [JQ](https://stedolan.github.io/jq/ "jq command-line JSON processor") installed on the system.
 
-* [Spine] (http://www.cacti.net/spine_download.php): if you use Cacti with Spine Poller (recommemded), that must be compilled increasing default characters limit of the results, using the next commands: 
+* [Spine] (http://www.cacti.net/spine_download.php): if you use Cacti with Spine Poller (recommemded), this must be compiled increasing the default characters limit for the results, using the next commands: 
  
 ```sh
 $ ./configure --with-results-buffer=20148
@@ -23,18 +23,18 @@ $ sudo make install
 
 **"ElasticSearch-Cacti" template installation**
 
-Installation is quite easy, just copy "elasticsearch.sh" to Cacti "scripts" folder and import elasticsearch.xml template with "Import templates" option. 
+Installation is quite easy, just copy "elasticsearch.sh" to the Cacti "scripts" folder and import elasticsearch.xml template with the "Import templates" option. 
 
 
 **How to create graphics**
 
-To generate one or more graphics you should follow standard process, create a "Device" and select the "Host template" appropriate or just the graphics you want to visualize. Data requested to generate graphics will be hostname (IP or domain) and sometimes (it deppends on selected graphic) cluster node name (or index) too. Graphics will not visualize requested hostname but node name it is being requested. "Device" hostname will be the one than "elasticsearch.sh" script get from ElasticSearch API. You should not confuse the host that receive the request with the node or index you want to get graphics. If you are not familiar with Cacti, if graphics show "|input_es_node|" or "|input_index_name|" instead of node name, you can fix it with the next. 
+To generate one or more graphics you should follow the standard process, create a "Device" and select the appropriate "Host template" or just the graphics you want to visualize. The data required to generate will be the hostname (IP or domain) and sometimes (it depends on the selected graphic) the cluster node name (or index) too. Graphics will not visualize the requested hostname but node name instead it is being requested. The "Device" hostname will be the one that the "elasticsearch.sh" script gets from the ElasticSearch API. You should not confuse the host that receives the request with the node or index whose graphics you want to get. If you are not familiar with Cacti, if graphics show "|input_es_node|" or "|input_index_name|" instead of the node name, you can fix it this way.
 
 Graph Management > Search: "input_es_node" or "input_index_name" > Select >  Choose an action: Reapply Suggested Names.
 
-Generally, it is recommended to use as host only clusted nodes not configured as "data" mode. It is also recommended to set different cluster nodes to submit requests between several systems.  
+Generally, it is recommended to use as host only clustered nodes not configured as "data" mode. It is also recommended to set different cluster nodes to submit requests among several systems.  
 
-It is possible to use HTTP authentication (Basic and Digest), to modify ElasticSearch port and set curl options (timeouts, proxy http / SOCKS 5, etc.), just edit "elascticsearch.sh" header options. 
+You can use HTTP authentication (Basic and Digest), to modify ElasticSearch port and set curl options (timeouts, proxy http / SOCKS 5, etc.), just edit the "elascticsearch.sh" header options. 
 
 ## Host Templates.
 
@@ -98,7 +98,7 @@ It is possible to use HTTP authentication (Basic and Digest), to modify ElasticS
 ### ElasticSearch Index.
 
 Only for data nodes. 
-It has same graphics as previous "Index Host template", obviously by cluster node (not by index).
+It has same graphics the same graphics as the previous "Index Host template", obviously by cluster node (not by index).
 
 ###ElasticSearch JVM + Cluster health / status.
 
@@ -133,7 +133,7 @@ It has same graphics as previous "Index Host template", obviously by cluster nod
 
 ###ElasticSearch Threads pool.
 
-Nodes not defined as clients only could show values on graphics that visualize threads that work as index, like generic, management, listener, get, search...
+Nodes not defined as clients can only show values on graphics that show threads working as indexes, like generic, management, listener, get, search...
 
 
 * Elastic node thread pool bulk.
@@ -171,22 +171,17 @@ Nodes not defined as clients only could show values on graphics that visualize t
 * Elastic node thread pool warmer.
 * Elastic node thread pool warmer (completed).
 
-**How to reduce as RRD table size and http requests to cluster as much as possible** (Only Cacti advanced users).
+**How to reduce a RRD table size and HTTP requests to the cluster as much as possible** (Cacti advanced users only).
 
-If you see "Associated Graph Templates" graphics names, you realize they are group together. For example "Elastic node thread pool search" and "Elastic node thread pool get" or "Elastic node OS CPU" and "Elastic node OS Load average". That means they are using the same "Data template", so all RRD tables that feed that graphics can be exchanged between them because they hold the same information. 
+If you see "Associated Graph Templates" graphics names, you realize they are grouped together. For example "Elastic node thread pool search" and "Elastic node thread pool get" or "Elastic node OS CPU" and "Elastic node OS Load average". That means they are using the same "Data template", so all RRD tables that feed those graphics can be interchanged because they hold the same information. 
 
-If you know that, you can set on Cacti that all "Elastic node thread pool XXXX" graphics use an unique RRD table (Data Source), that greately reduces disk usage and http request. Let's see and example with "thread pool" graphics.
+If you know that, you can set on Cacti that all "Elastic node thread pool XXXX" graphics use a single RRD table (Data Source), which greately reduces both disk usage and HTTP request. Let's see an example with "thread pool" graphics.
 
-Cacti > Data Sources > Host > "XXX thread pool (XXXX)" > We click on the first result and copy the path to file .rrd > We substitute on the remaining graphs previously showed the path. 
+Cacti > Data Sources > Host > "XXX thread pool (XXXX)" > We click on the first result and copy the path to the .rrd file > We substitute on the remaining graphs the path previously shown. 
 
-Now we just have to delete rrd files that are no longer required. If you do not care to lose data, you can delete all rrd files of "rra/" folder that belongs to the host. Another possibilitie is after 15 minutes or more you modified rrd folder path, to delete all that have been updated from, for example, 9 minutes (if they are updated every 300 seconds).
+Now we just have to delete the rrd files which are no longer required. If losing data doesn't bother you, you can delete all the .rrd files of the "rra/" folder beloning to the host. Another possibilitie is after 15 minutes or more you modified rrd folder path, to delete all that have been updated from, for example, 9 minutes (if they are updated every 300 seconds).
 
 ```sh
 $ find /var/www/html/cacti/rra ! -mmin -9 -type f -print # Test
 $ find /var/www/html/cacti/rra ! -mmin -9 -type f -print -exec rm -rf {} \; # Delete
 ```
-
-
-
-
-
