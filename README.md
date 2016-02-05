@@ -3,7 +3,6 @@
 
 "ElasticSearch - Cacti" template is a free software alternative ([RRDTool](http://oss.oetiker.ch/rrdtool/ "RRDtool is the OpenSource industry standard graphing system for time series data") based) to popular monitoring software  "[ElasticSearch](https://www.elastic.co/ "Search & Analyze Data in Real Time") 's [Marvel](https://www.elastic.co/products/marvel "Monitor Elasticsearch")". In contrast with other [Cacti](http://www.cacti.net/index.php "Graphing solution") plugins and templates you can find on Internet,  "ElasticSearch - Cacti" allows us to visualize 100% of the statistics that the ElasticSearch cluster provides us. 
 
-##Screenshots
 
 Some screenshots [here](https://github.com/Busindre/ElasticSearch-Cacti/issues/1 "ElasticSearch-Cacti screenshots").
 
@@ -186,3 +185,22 @@ Now we just have to delete the rrd files which are no longer required. If losing
 $ find /var/www/html/cacti/rra ! -mmin -9 -type f -print # Test
 $ find /var/www/html/cacti/rra ! -mmin -9 -type f -print -exec rm -rf {} \; # Delete
 ```
+
+
+
+##Screenshots
+
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374946/2f7b26b0-bcad-11e5-8f47-6f3e97b6fc77.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12625797/a3e3bbda-c535-11e5-8bf9-ed3cf1925d8e.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374949/3bb9f99c-bcad-11e5-9b58-dbbb78a8464e.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374952/3bee5408-bcad-11e5-9df9-dc6b3f9dca0a.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374953/3bf212a0-bcad-11e5-8c5d-608ec89fe7ac.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374954/3bfa5b86-bcad-11e5-83d8-c8ec50e49609.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374955/3bfc2d6c-bcad-11e5-964a-12faa9a7451e.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374950/3bd79fc4-bcad-11e5-906c-dfadf180e714.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374956/3c01cc36-bcad-11e5-8d77-f8765b600ecf.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374957/3c09f1fe-bcad-11e5-8424-93c0a59f9770.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12625817/c26032b4-c535-11e5-944e-d5395de6bc15.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374959/3c12b1b8-bcad-11e5-87ac-1198a45b47fd.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374961/3c22c9ae-bcad-11e5-85ca-895750447519.png)
+![alt tag](https://cloud.githubusercontent.com/assets/1475543/12374962/3c237782-bcad-11e5-9859-bd8f00c88f0f.png)
