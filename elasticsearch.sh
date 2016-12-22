@@ -25,12 +25,16 @@ http_pass=""
 # $1 = ElasticSearch API host (ohne port).
 # $2 = Option data input method.
 
+if [ ! -z "$http_user" ]
+  then
+      CURL_OPTIONS="${CURL_OPTIONS} --user ${http_user}:${http_pass}"
+fi
 
 if [ "$2" == "cluster" ]
   then
 
 #	Cluster health
-	health=($(curl $CURL_OPTIONS  http://$http_user:$http_pass@$1:$port/_cluster/health?pretty | jq '.active_primary_shards,.active_shards,.relocating_shards,.initializing_shards,.unassigned_shards,.delayed_unassigned_shards,.status'))
+	health=($(curl $CURL_OPTIONS  http://$1:$port/_cluster/health?pretty | jq '.active_primary_shards,.active_shards,.relocating_shards,.initializing_shards,.unassigned_shards,.delayed_unassigned_shards,.status'))
 
 	[ -z "$health" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -56,7 +60,7 @@ if [ "$2" == "cluster" ]
 
 
 #	Cat pending tasks
-	curl $CURL_OPTIONS 'http://$http_user:$http_pass@$1:9200/_cat/pending_tasks?v' > $tmp_task_file
+	curl $CURL_OPTIONS 'http://$1:9200/_cat/pending_tasks?v' > $tmp_task_file
 	immediate=`grep -c IMMEDIATE $tmp_task_file`
 	urgent=`grep -c URGENT $tmp_task_file`
 	high=`grep -c HIGH $tmp_task_file`
@@ -76,7 +80,7 @@ if [ "$2" == "cluster" ]
 
 elif  [ "$2" == "active_node" ]
   then
-	curl $CURL_OPTIONS http://$http_user:$http_pass@$1:9200/ | grep -i "for Search" > /dev/null
+	curl $CURL_OPTIONS http://$1:9200/ | grep -i "for Search" > /dev/null
 	if [ "$?" == "0" ]
  	 then
 		echo "active_node:1"; # API reply Ok
@@ -88,7 +92,7 @@ elif  [ "$2" == "active_node" ]
 elif  [ "$2" == "jvm" ] && [ ! -z "$3" ]  
    then
 
-jvm=($(curl $CURL_OPTIONS http://$http_user:$http_pass@$1:$port/_nodes/$3/stats/jvm/?pretty | jq '.nodes[] | .jvm.mem.heap_used_in_bytes,.jvm.mem.heap_used_percent,.jvm.mem.heap_committed_in_bytes,.jvm.mem.non_heap_used_in_bytes,.jvm.mem.non_heap_committed_in_bytes,.jvm.mem.pools[].used_in_bytes,.jvm.threads.count,.jvm.gc.collectors[].collection_count,.jvm.buffer_pools[].count'))
+jvm=($(curl $CURL_OPTIONS http://$1:$port/_nodes/$3/stats/jvm/?pretty | jq '.nodes[] | .jvm.mem.heap_used_in_bytes,.jvm.mem.heap_used_percent,.jvm.mem.heap_committed_in_bytes,.jvm.mem.non_heap_used_in_bytes,.jvm.mem.non_heap_committed_in_bytes,.jvm.mem.pools[].used_in_bytes,.jvm.threads.count,.jvm.gc.collectors[].collection_count,.jvm.buffer_pools[].count'))
 
 [ -z "$jvm" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -97,7 +101,7 @@ echo "heap_used_in_bytes:${jvm[0]} heap_used_percent:${jvm[1]} heap_committed_in
 
 elif  [ "$2" == "indices" ] # Only data nodes
    then 
-  ind=($(curl $CURL_OPTIONS http://$http_user:$http_pass@$1:9200/_nodes/$3/stats/indices/ | jq '.nodes[].indices | .docs[],.get.current,.search.fetch_current,.search.query_current,.merges.current,.warmer.current,.percolate.queries,.suggest.current,.filter_cache.memory_size_in_bytes,.id_cache.memory_size_in_bytes,.fielddata.memory_size_in_bytes,.query_cache.memory_size_in_bytes,.store.size_in_bytes,.indexing.index_total,.indexing.index_time_in_millis,.indexing.index_current,.indexing.delete_total,.indexing.delete_time_in_millis,.indexing.delete_current,.refresh.total,.flush.total,.warmer.total,.completion.size_in_bytes,.translog.operations,.translog.size_in_bytes,.recovery.current_as_source,.recovery.current_as_target,.percolate.total,.get.total,.get.exists_total,.search.query_total,.search.fetch_total,.merges.current_docs,.merges.current_size_in_bytes,.merges.total,.merges.total_docs,.merges.total_size_in_bytes,.percolate.current,.segments.count,.segments.memory_in_bytes,.segments.index_writer_memory_in_bytes,.segments.version_map_memory_in_bytes,.segments.fixed_bit_set_memory_in_bytes,.query_cache.evictions,.query_cache.hit_count,.query_cache.miss_count,.filter_cache.evictions,.fielddata.evictions,.get.time_in_millis,.get.exists_time_in_millis,.get.missing_total,.get.missing_time_in_millis,.merges.total_time_in_millis,.search.query_time_in_millis,.search.fetch_time_in_millis,.refresh.total_time_in_millis,.flush.total_time_in_millis,.warmer.total_time_in_millis,.percolate.time_in_millis,.suggest.time_in_millis,.suggest.total,.percolate.memory_size_in_bytes'))
+  ind=($(curl $CURL_OPTIONS http://$1:9200/_nodes/$3/stats/indices/ | jq '.nodes[].indices | .docs[],.get.current,.search.fetch_current,.search.query_current,.merges.current,.warmer.current,.percolate.queries,.suggest.current,.filter_cache.memory_size_in_bytes,.id_cache.memory_size_in_bytes,.fielddata.memory_size_in_bytes,.query_cache.memory_size_in_bytes,.store.size_in_bytes,.indexing.index_total,.indexing.index_time_in_millis,.indexing.index_current,.indexing.delete_total,.indexing.delete_time_in_millis,.indexing.delete_current,.refresh.total,.flush.total,.warmer.total,.completion.size_in_bytes,.translog.operations,.translog.size_in_bytes,.recovery.current_as_source,.recovery.current_as_target,.percolate.total,.get.total,.get.exists_total,.search.query_total,.search.fetch_total,.merges.current_docs,.merges.current_size_in_bytes,.merges.total,.merges.total_docs,.merges.total_size_in_bytes,.percolate.current,.segments.count,.segments.memory_in_bytes,.segments.index_writer_memory_in_bytes,.segments.version_map_memory_in_bytes,.segments.fixed_bit_set_memory_in_bytes,.query_cache.evictions,.query_cache.hit_count,.query_cache.miss_count,.filter_cache.evictions,.fielddata.evictions,.get.time_in_millis,.get.exists_time_in_millis,.get.missing_total,.get.missing_time_in_millis,.merges.total_time_in_millis,.search.query_time_in_millis,.search.fetch_time_in_millis,.refresh.total_time_in_millis,.flush.total_time_in_millis,.warmer.total_time_in_millis,.percolate.time_in_millis,.suggest.time_in_millis,.suggest.total,.percolate.memory_size_in_bytes'))
   
 [ -z "$ind" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -106,7 +110,7 @@ echo "docs_count:${ind[0]} docs_deleted:${ind[1]} get:${ind[2]} search_fetch:${i
 
 elif  [ "$2" == "thread_pool" ]
    then
-  thrpool=($(curl $CURL_OPTIONS http://$http_user:$http_pass@$1:9200/_nodes/$3/stats/thread_pool/ | jq '.nodes[].thread_pool | .percolate.threads,.percolate.queue,.percolate.active,.percolate.rejected,.fetch_shard_started.threads,.fetch_shard_started.queue,.fetch_shard_started.active,.fetch_shard_started.rejected,.listener.threads,.listener.queue,.listener.active,.listener.rejected,.index.threads,.index.queue,.index.active,.index.rejected,.refresh.threads,.refresh.queue,.refresh.active,.refresh.rejected,.suggest.threads,.suggest.queue,.suggest.active,.suggest.rejected,.generic.threads,.generic.queue,.generic.active,.generic.rejected,.warmer.threads,.warmer.queue,.warmer.active,.warmer.rejected,.search.threads,.search.queue,.search.active,.search.rejected,.flush.threads,.flush.queue,.flush.active,.flush.rejected,.optimize.threads,.optimize.queue,.optimize.active,.optimize.rejected,.fetch_shard_store.threads,.fetch_shard_store.queue,.fetch_shard_store.active,.fetch_shard_store.rejected,.management.threads,.management.queue,.management.active,.management.rejected,.get.threads,.get.queue,.get.active,.get.rejected,.merge.threads,.merge.queue,.merge.active,.merge.rejected,.bulk.threads,.bulk.queue,.bulk.active,.bulk.rejected,.snapshot.threads,.snapshot.queue,.snapshot.active,.snapshot.rejected,.percolate.completed,.fetch_shard_started.completed,.listener.completed,.index.completed,.refresh.completed,.suggest.completed,.generic.completed,.warmer.completed,.search.completed,.flush.completed,.optimize.completed,.fetch_shard_store.completed,.management.completed,.get.completed,.merge.completed,.bulk.completed,.snapshot.completed'))
+  thrpool=($(curl $CURL_OPTIONS http://$1:9200/_nodes/$3/stats/thread_pool/ | jq '.nodes[].thread_pool | .percolate.threads,.percolate.queue,.percolate.active,.percolate.rejected,.fetch_shard_started.threads,.fetch_shard_started.queue,.fetch_shard_started.active,.fetch_shard_started.rejected,.listener.threads,.listener.queue,.listener.active,.listener.rejected,.index.threads,.index.queue,.index.active,.index.rejected,.refresh.threads,.refresh.queue,.refresh.active,.refresh.rejected,.suggest.threads,.suggest.queue,.suggest.active,.suggest.rejected,.generic.threads,.generic.queue,.generic.active,.generic.rejected,.warmer.threads,.warmer.queue,.warmer.active,.warmer.rejected,.search.threads,.search.queue,.search.active,.search.rejected,.flush.threads,.flush.queue,.flush.active,.flush.rejected,.optimize.threads,.optimize.queue,.optimize.active,.optimize.rejected,.fetch_shard_store.threads,.fetch_shard_store.queue,.fetch_shard_store.active,.fetch_shard_store.rejected,.management.threads,.management.queue,.management.active,.management.rejected,.get.threads,.get.queue,.get.active,.get.rejected,.merge.threads,.merge.queue,.merge.active,.merge.rejected,.bulk.threads,.bulk.queue,.bulk.active,.bulk.rejected,.snapshot.threads,.snapshot.queue,.snapshot.active,.snapshot.rejected,.percolate.completed,.fetch_shard_started.completed,.listener.completed,.index.completed,.refresh.completed,.suggest.completed,.generic.completed,.warmer.completed,.search.completed,.flush.completed,.optimize.completed,.fetch_shard_store.completed,.management.completed,.get.completed,.merge.completed,.bulk.completed,.snapshot.completed'))
 
 [ -z "$thrpool" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -115,7 +119,7 @@ echo "percolate_threads:${thrpool[0]} percolate_queue:${thrpool[1]} percolate_ac
 
 elif  [ "$2" == "http" ]
    then
-	http=($(curl $CURL_OPTIONS http://$http_user:$http_pass@$1:9200/_nodes/$3/stats/http/ | jq '.nodes[] | .http.current_open,.http.total_opened'))
+	http=($(curl $CURL_OPTIONS http://$1:9200/_nodes/$3/stats/http/ | jq '.nodes[] | .http.current_open,.http.total_opened'))
 
         [ -z "$http" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -124,7 +128,7 @@ elif  [ "$2" == "http" ]
 
 elif  [ "$2" == "breaker" ]
    then
-        breaker=($(curl $CURL_OPTIONS http://$http_user:$http_pass@$1:9200/_nodes/$3/stats/breaker/ | jq '.nodes[].breakers | .request.limit_size_in_bytes,.request.estimated_size_in_bytes,.request.tripped,.fielddata.limit_size_in_bytes,.fielddata.estimated_size_in_bytes,.fielddata.tripped,.parent.limit_size_in_bytes,.parent.estimated_size_in_bytes,.parent.tripped'))
+        breaker=($(curl $CURL_OPTIONS http://$1:9200/_nodes/$3/stats/breaker/ | jq '.nodes[].breakers | .request.limit_size_in_bytes,.request.estimated_size_in_bytes,.request.tripped,.fielddata.limit_size_in_bytes,.fielddata.estimated_size_in_bytes,.fielddata.tripped,.parent.limit_size_in_bytes,.parent.estimated_size_in_bytes,.parent.tripped'))
 
 	[ -z "$breaker" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -133,17 +137,17 @@ elif  [ "$2" == "breaker" ]
 
 elif  [ "$2" == "shards" ] # Only data nodes
    then
-        curl $CURL_OPTIONS "http://$http_user:$http_pass@$1:9200/_cat/allocation" |  grep -i $3 | awk '{print "shards:" $1}'
+        curl $CURL_OPTIONS "http://$1:9200/_cat/allocation" |  grep -i $3 | awk '{print "shards:" $1}'
 
 
 elif  [ "$2" == "index" ] # Index
    then
 
-ind=($( curl $CURL_OPTIONS "http://$http_user:$http_pass@$1:9200/$3/_stats/?pretty" | jq '.indices."'$3'"[]  | .docs[],.get.current,.search.fetch_current,.search.query_current,.merges.current,.warmer.current,.percolate.queries,.suggest.current,.filter_cache.memory_size_in_bytes,.id_cache.memory_size_in_bytes,.fielddata.memory_size_in_bytes,.query_cache.memory_size_in_bytes,.store.size_in_bytes,.indexing.index_total,.indexing.index_current,.indexing.delete_total,.indexing.delete_current,.refresh.total,.flush.total,.warmer.total,.completion.size_in_bytes,.translog.operations,.translog.size_in_bytes,.recovery.current_as_source,.recovery.current_as_target,.percolate.total,.get.total,.get.exists_total,.search.query_total,.search.fetch_total,.merges.current_docs,.merges.current_size_in_bytes,.merges.total,.merges.total_docs,.merges.total_size_in_bytes,.percolate.current,.segments.count,.segments.memory_in_bytes,.segments.index_writer_memory_in_bytes,.segments.version_map_memory_in_bytes,.segments.fixed_bit_set_memory_in_bytes,.query_cache.evictions,.query_cache.hit_count,.query_cache.miss_count,.filter_cache.evictions,.fielddata.evictions,.get.time_in_millis,.get.exists_time_in_millis,.get.missing_total,.get.missing_time_in_millis,.merges.total_time_in_millis,.search.query_time_in_millis,.search.fetch_time_in_millis,.refresh.total_time_in_millis,.flush.total_time_in_millis,.warmer.total_time_in_millis,.percolate.time_in_millis,.suggest.time_in_millis,.suggest.total,.indexing.index_time_in_millis,.indexing.delete_time_in_millis,.percolate.memory_size_in_bytes'))
+ind=($( curl $CURL_OPTIONS "http://$1:9200/$3/_stats/?pretty" | jq '.indices."'$3'"[]  | .docs[],.get.current,.search.fetch_current,.search.query_current,.merges.current,.warmer.current,.percolate.queries,.suggest.current,.filter_cache.memory_size_in_bytes,.id_cache.memory_size_in_bytes,.fielddata.memory_size_in_bytes,.query_cache.memory_size_in_bytes,.store.size_in_bytes,.indexing.index_total,.indexing.index_current,.indexing.delete_total,.indexing.delete_current,.refresh.total,.flush.total,.warmer.total,.completion.size_in_bytes,.translog.operations,.translog.size_in_bytes,.recovery.current_as_source,.recovery.current_as_target,.percolate.total,.get.total,.get.exists_total,.search.query_total,.search.fetch_total,.merges.current_docs,.merges.current_size_in_bytes,.merges.total,.merges.total_docs,.merges.total_size_in_bytes,.percolate.current,.segments.count,.segments.memory_in_bytes,.segments.index_writer_memory_in_bytes,.segments.version_map_memory_in_bytes,.segments.fixed_bit_set_memory_in_bytes,.query_cache.evictions,.query_cache.hit_count,.query_cache.miss_count,.filter_cache.evictions,.fielddata.evictions,.get.time_in_millis,.get.exists_time_in_millis,.get.missing_total,.get.missing_time_in_millis,.merges.total_time_in_millis,.search.query_time_in_millis,.search.fetch_time_in_millis,.refresh.total_time_in_millis,.flush.total_time_in_millis,.warmer.total_time_in_millis,.percolate.time_in_millis,.suggest.time_in_millis,.suggest.total,.indexing.index_time_in_millis,.indexing.delete_time_in_millis,.percolate.memory_size_in_bytes'))
 
 [ -z "$ind" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
-shards=($(curl $CURL_OPTIONS "http://$http_user:$http_pass@$1:9200/$3/_stats/?pretty" | jq '._shards.total,._shards.successful,._shards.failed'))
+shards=($(curl $CURL_OPTIONS "http://$1:9200/$3/_stats/?pretty" | jq '._shards.total,._shards.successful,._shards.failed'))
 
 echo "docs_count:${ind[0]} docs_deleted:${ind[1]} get:${ind[2]} search_fetch:${ind[3]} search_query:${ind[4]} merges:${ind[5]} warmer:${ind[6]} percolate:${ind[7]} suggest:${ind[8]} filter_cache:${ind[9]} id_cache:${ind[10]} field_data:${ind[11]} query_cache:${ind[12]} indices_store:${ind[13]} index_total:${ind[14]} index_current:${ind[15]} index_delete_total:${ind[16]} index_delete:${ind[17]} refresh_total:${ind[18]} flush_total:${ind[19]} warmer_total:${ind[20]} completion_size:${ind[21]} translog_ops:${ind[22]} translog_size:${ind[23]} recovery_current_source:${ind[24]} recovery_current_target:${ind[25]} percolate_total:${ind[26]} get_total:${ind[27]} get_exit_total:${ind[28]} search_total:${ind[29]} search_fetch_total:${ind[30]} merges_current_docs:${ind[31]} merges_current_size:${ind[32]} merges_total:${ind[33]} merges_total_docs:${ind[34]} merges_total_size:${ind[35]} percolate_current:${ind[36]} segments_count:${ind[37]} segments_memory:${ind[38]} segments_index_writer_memory:${ind[39]} segments_version_map_memory:${ind[40]} segments_fixed_bit_set_memory:${ind[41]} query_cache_evictions:${ind[42]} query_cache_hit_count:${ind[43]} query_cache_miss_count:${ind[44]} filter_cache_evictions:${ind[45]} fielddata_evictions:${ind[46]} get_time_in_millis:${ind[47]} get_exists_time_in_millis:${ind[48]} get_missing_total:${ind[49]} get_missing_time_in_millis:${ind[50]} merges_total_time_in_millis:${ind[51]} search_query_time_in_millis:${ind[52]} search_fetch_time_in_millis:${ind[53]} refresh_total_time_in_millis:${ind[54]} flush_total_time_in_millis:${ind[55]} warmer_total_time_in_millis:${ind[56]} percolate_time_in_millis:${ind[57]} suggest_time_in_millis:${ind[58]} suggest_total:${ind[59]} index_time_in_millis:${ind[60]} index_delete_time_in_millis:${ind[61]} percolate_memory_size_in_bytes:${ind[62]} shards_total:${shards[0]} shards_successful:${shards[1]} shards_failed:${shards[2]}";
 
@@ -151,7 +155,7 @@ echo "docs_count:${ind[0]} docs_deleted:${ind[1]} get:${ind[2]} search_fetch:${i
 elif  [ "$2" == "os" ] 
    then
 
-os=($(curl $CURL_OPTIONS "http://$http_user:$http_pass@$1:9200/_nodes/$3/stats/os,process/?pretty"  | jq '.nodes[] | .os.load_average[0],.os.load_average[1],.os.load_average[2],.os.cpu.sys,.os.cpu.user,.os.cpu.idle,.os.cpu.usage,.os.cpu.stolen,.os.mem.free_in_bytes,.os.mem.used_in_bytes,.os.mem.free_percent,.os.mem.used_percent,.os.mem.actual_free_in_bytes,.os.mem.actual_used_in_bytes,.os.swap.used_in_bytes,.os.swap.free_in_bytes,.process.open_file_descriptors,.process.cpu.percent,.process.cpu.sys_in_millis,.process.cpu.user_in_millis,.process.cpu.total_in_millis,.process.mem.resident_in_bytes,.process.mem.share_in_bytes,.process.mem.total_virtual_in_bytes'))
+os=($(curl $CURL_OPTIONS "http://$1:9200/_nodes/$3/stats/os,process/?pretty"  | jq '.nodes[] | .os.load_average[0],.os.load_average[1],.os.load_average[2],.os.cpu.sys,.os.cpu.user,.os.cpu.idle,.os.cpu.usage,.os.cpu.stolen,.os.mem.free_in_bytes,.os.mem.used_in_bytes,.os.mem.free_percent,.os.mem.used_percent,.os.mem.actual_free_in_bytes,.os.mem.actual_used_in_bytes,.os.swap.used_in_bytes,.os.swap.free_in_bytes,.process.open_file_descriptors,.process.cpu.percent,.process.cpu.sys_in_millis,.process.cpu.user_in_millis,.process.cpu.total_in_millis,.process.mem.resident_in_bytes,.process.mem.share_in_bytes,.process.mem.total_virtual_in_bytes'))
 
 [ -z "$os" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -161,7 +165,7 @@ echo "load_average_1:${os[0]} load_average_5:${os[1]} load_average_15:${os[2]} c
 elif  [ "$2" == "network" ]
    then
 
-net=($(curl $CURL_OPTIONS "http://$http_user:$http_pass@$1:9200/_nodes/$3/stats/network,transport/?pretty"  | jq '.nodes[] | .network.tcp.active_opens,.network.tcp.passive_opens,.network.tcp.curr_estab,.network.tcp.in_segs,.network.tcp.out_segs,.network.tcp.retrans_segs,.network.tcp.estab_resets,.network.tcp.attempt_fails,.network.tcp.in_errs,.network.tcp.out_rsts,.transport.server_open,.transport.rx_count,.transport.rx_size_in_bytes,.transport.tx_count,.transport.tx_size_in_bytes'))
+net=($(curl $CURL_OPTIONS "http://$1:9200/_nodes/$3/stats/network,transport/?pretty"  | jq '.nodes[] | .network.tcp.active_opens,.network.tcp.passive_opens,.network.tcp.curr_estab,.network.tcp.in_segs,.network.tcp.out_segs,.network.tcp.retrans_segs,.network.tcp.estab_resets,.network.tcp.attempt_fails,.network.tcp.in_errs,.network.tcp.out_rsts,.transport.server_open,.transport.rx_count,.transport.rx_size_in_bytes,.transport.tx_count,.transport.tx_size_in_bytes'))
 
 [ -z "$net" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
@@ -171,7 +175,7 @@ echo "active_opens:${net[0]} passive_opens:${net[1]} curr_estab:${net[2]} in_seg
 elif  [ "$2" == "fs" ]
    then
 
-fs=($(curl $CURL_OPTIONS "http://$http_user:$http_pass@$1:9200/_nodes/$3/stats/fs/?pretty" | jq '.nodes[].fs.total | .total_in_bytes,.free_in_bytes,.available_in_bytes,.disk_reads,.disk_writes,.disk_io_op,.disk_read_size_in_bytes,.disk_write_size_in_bytes,.disk_io_size_in_bytes'))
+fs=($(curl $CURL_OPTIONS "http://$1:9200/_nodes/$3/stats/fs/?pretty" | jq '.nodes[].fs.total | .total_in_bytes,.free_in_bytes,.available_in_bytes,.disk_reads,.disk_writes,.disk_io_op,.disk_read_size_in_bytes,.disk_write_size_in_bytes,.disk_io_size_in_bytes'))
 
 [ -z "$fs" ] && echo "Host $1:$port is not responding" && exit # Host check.
 
